@@ -114,7 +114,7 @@ def generate_html_body(scenario, body):
             </p>
 
             <div style="text-align:center; margin: 30px 0;">
-                <a href="https://example.com/training"
+                <a href="http://localhost:8000/training_page.html"
                    style="background-color:#2563eb; color:white; padding:13px 24px; text-decoration:none; border-radius:8px; font-weight:bold;">
                    Review Training Material
                 </a>

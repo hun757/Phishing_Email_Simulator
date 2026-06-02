@@ -1,3 +1,7 @@
 [2026-06-02 17:34:44] Receiver: security8886@gmail.com | Scenario: Password Reset Training | Status: SUCCESS
 [2026-06-02 17:42:42] Receiver: pjhgns1234@gmail.com | Scenario: Password Reset Training | Status: SUCCESS
 [2026-06-02 18:48:15] Receiver: pjhgns1234@gmail.com | Scenario: Password Reset Training | Status: SUCCESS
+[2026-06-02 18:51:09] Receiver: milky9925@gmail.com | Scenario: Password Reset Training | Status: SUCCESS
+[2026-06-02 18:56:20] Receiver: security8886@gmail.com | Scenario: Password Reset Training | Status: SUCCESS
+[2026-06-02 19:01:51] Receiver: security8886@gmail.com | Scenario: Password Reset Training | Status: SUCCESS
+[2026-06-02 19:09:41] Receiver: pjhgns1234@gmail.com | Scenario: Password Reset Training | Status: SUCCESS

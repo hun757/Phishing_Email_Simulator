@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Security Verification</title>
+
+<style>
+body{
+    background:#050807;
+    color:#39ff14;
+    font-family:Consolas;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+    margin:0;
+}
+
+.container{
+    width:500px;
+    background:#0b0f0c;
+    border:1px solid #39ff14;
+    padding:40px;
+    text-align:center;
+    border-radius:10px;
+}
+
+button{
+    background:#14532d;
+    color:#39ff14;
+    border:1px solid #39ff14;
+    padding:12px 20px;
+    cursor:pointer;
+    font-family:Consolas;
+    margin-top:20px;
+}
+
+.hidden{
+    display:none;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>Microsoft Security Verification</h1>
+
+    <p>
+        Suspicious activity has been detected on your account.
+    </p>
+
+    <button onclick="showTraining()">
+        Verify Account
+    </button>
+
+    <div id="trainingMessage" class="hidden">
+
+        <h2 style="margin-top:30px;">
+            ⚠️ You Fell For a Phishing Simulation
+        </h2>
+
+        <p>
+            This was part of an authorised cybersecurity awareness exercise.
+        </p>
+
+        <p>
+            Warning signs included:
+        </p>
+
+        <ul style="text-align:left;">
+            <li>Urgent wording</li>
+            <li>Suspicious verification request</li>
+            <li>Unexpected security alert</li>
+        </ul>
+
+    </div>
+
+</div>
+
+<script>
+function showTraining(){
+    document.getElementById("trainingMessage").classList.remove("hidden");
+}
+</script>
+
+</body>
+</html>

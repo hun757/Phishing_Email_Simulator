@@ -1,118 +1,144 @@
-# Phishing Email Simulator
+# Phishing Awareness Email Simulator
 
-A safe cybersecurity learning project built with Python.
+A cybersecurity awareness training simulator built with Python and Tkinter.
 
-This project simulates phishing-awareness training emails using Gmail SMTP and environment variables. The goal is to understand email automation, phishing indicators, and secure secret management in a controlled educational environment.
+This project provides a safe phishing-awareness training environment using custom HTML emails, simulation landing pages, SMTP email delivery, logging features, and a hacker-style dark UI.
 
 ---
 
 ## Features
 
-* Safe phishing-awareness email simulation
-* Gmail SMTP integration
-* Environment variable protection with `.env`
-* Python email automation
-* Security-focused project structure
+* Custom phishing-awareness training scenarios
+* HTML email templates
+* Browser-based HTML email preview
+* SMTP email delivery using Gmail
+* Hacker-style dark desktop UI
+* Email sending logs
+* Modular Python project structure
+* Scenario simulation landing pages
+* Safe training environment with no credential collection
+
+---
+
+## Training Scenarios
+
+The simulator currently includes multiple awareness scenarios:
+
+* Password Reset Training
+* Invoice Training
+* Security Alert Training
+* Delivery Notification Training
+* HR Policy Update Training
+
+Each scenario generates different phishing-awareness style email content for cybersecurity education purposes.
 
 ---
 
 ## Technologies Used
 
 * Python
-* Gmail SMTP
-* python-dotenv
-* Git & GitHub
-* Virtual Environment (`venv`)
+* Tkinter
+* HTML/CSS
+* SMTP (Gmail)
+* dotenv
+* Webbrowser module
 
 ---
 
 ## Project Structure
 
 ```text
-phishing-email-simulator/
+project/
 │
-├── email_simulator/
-│   └── send_training_email.py
-│
+├── main.py
+├── email_templates.py
+├── email_sender.py
+├── logger.py
+├── training_page.html
+├── logs/
 ├── .env
-├── .gitignore
-├── README.md
-└── .venv/
+└── README.md
 ```
 
 ---
 
-## Setup
+## Installation
 
 ### 1. Clone Repository
 
 ```bash
-git clone https://github.com/yourusername/phishing-email-simulator.git
-cd phishing-email-simulator
+git clone https://github.com/YOUR_USERNAME/YOUR_REPOSITORY.git
+cd YOUR_REPOSITORY
 ```
 
----
-
-### 2. Create Virtual Environment
-
-```bash
-python -m venv .venv
-```
-
-Activate:
-
-#### Windows PowerShell
-
-```powershell
-.\.venv\Scripts\activate
-```
-
----
-
-### 3. Install Dependencies
+### 2. Install Requirements
 
 ```bash
 pip install python-dotenv
 ```
 
----
-
-### 4. Configure Environment Variables
+### 3. Configure Environment Variables
 
 Create a `.env` file:
 
 ```env
-EMAIL_ADDRESS=your_test_email@gmail.com
+EMAIL_ADDRESS=your_email@gmail.com
 APP_PASSWORD=your_gmail_app_password
 ```
 
 ---
 
-### 5. Run the Program
+## Running the Application
+
+Start the desktop application:
 
 ```bash
-python email_simulator/send_training_email.py
+python main.py
+```
+
+Optional local web server for training pages:
+
+```bash
+python -m http.server 8000
+```
+
+Then open:
+
+```text
+http://localhost:8000/training_page.html
 ```
 
 ---
 
-## Security Notes
+## Safety Notice
 
-This project is designed strictly for educational and defensive cybersecurity purposes.
+This project is designed strictly for authorised cybersecurity awareness training and educational purposes.
 
-* No credential harvesting
-* No impersonation
-* No malicious payloads
-* No real phishing attacks
+The simulator:
 
-Only safe phishing-awareness training simulations are performed.
+* Does not collect credentials
+* Does not impersonate real organisations
+* Does not deploy malicious payloads
+* Does not perform credential harvesting
+
+All simulation pages clearly indicate authorised training after interaction.
 
 ---
 
-## Learning Objectives
+## Future Improvements
 
-* Understand SMTP email automation
-* Learn secure secret management
-* Practice cybersecurity project structure
-* Explore phishing awareness concepts
-* Improve Python automation skills
+* Scenario-specific phishing landing pages
+* Attachment selection support
+* CSV bulk email campaigns
+* SQLite dashboard
+* Click tracking analytics
+* User management system
+* GitHub Pages deployment
+* Executable packaging (.exe)
+
+---
+
+## Author
+
+Jeonghun Park
+

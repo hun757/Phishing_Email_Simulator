@@ -1,0 +1,2 @@
+[2026-06-02 17:34:44] Receiver: security8886@gmail.com | Scenario: Password Reset Training | Status: SUCCESS
+[2026-06-02 17:42:42] Receiver: pjhgns1234@gmail.com | Scenario: Password Reset Training | Status: SUCCESS

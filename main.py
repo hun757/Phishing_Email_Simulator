@@ -1,99 +1,18 @@
 import os
-import smtplib
 import tkinter as tk
 from tkinter import ttk, messagebox
-from email.message import EmailMessage
-from datetime import datetime
 from dotenv import load_dotenv
 
-os.environ["TCL_LIBRARY"] = r"C:\Users\pjhgn\AppData\Local\Programs\Python\Python313\tcl\tcl8.6"
-os.environ["TK_LIBRARY"] = r"C:\Users\pjhgn\AppData\Local\Programs\Python\Python313\tcl\tk8.6"
+from email_templates import generate_training_email, generate_html_body
+from email_sender import send_email
+from logger import save_email_log, read_email_logs
+
 
 load_dotenv()
 
 EMAIL_ADDRESS = os.getenv("EMAIL_ADDRESS")
 APP_PASSWORD = os.getenv("APP_PASSWORD")
 
-
-def generate_training_email(scenario):
-    current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-
-    templates = {
-        "Password Reset Training": {
-            "subject": "[TRAINING SIMULATION] Password Reset Awareness Example",
-            "body": f"""
-SAFE CYBERSECURITY TRAINING EMAIL
-
-Scenario: Password Reset Awareness
-
-This is a simulated phishing-awareness training email.
-No real credentials are requested.
-No data is collected.
-
-Training purpose:
-- Learn how suspicious password reset emails may look
-- Practice identifying warning signs
-
-Indicators:
-- Urgent language
-- Password-related request
-- Generic greeting
-- Link-based action request
-
-Generated at: {current_time}
-"""
-        },
-        "Invoice Training": {
-            "subject": "[TRAINING SIMULATION] Invoice Awareness Example",
-            "body": f"""
-SAFE CYBERSECURITY TRAINING EMAIL
-
-Scenario: Invoice Awareness
-
-This is a simulated training email.
-No attachment is included.
-No payment is requested.
-
-Training purpose:
-- Learn how fake invoice emails may appear
-- Practice checking sender and context
-
-Indicators:
-- Unexpected invoice
-- Unknown sender
-- Pressure to act quickly
-- Attachment or payment request
-
-Generated at: {current_time}
-"""
-        },
-        "Security Alert Training": {
-            "subject": "[TRAINING SIMULATION] Security Alert Awareness Example",
-            "body": f"""
-SAFE CYBERSECURITY TRAINING EMAIL
-
-Scenario: Security Alert Awareness
-
-This is a simulated training email.
-No login page is included.
-No personal information is requested.
-
-Training purpose:
-- Learn how fake security alerts may look
-- Practice verifying suspicious account warnings
-
-Indicators:
-- Fear-based wording
-- Account suspension claim
-- Login request
-- Suspicious link
-
-Generated at: {current_time}
-"""
-        }
-    }
-
-    return templates[scenario]["subject"], templates[scenario]["body"]
 
 def preview_email():
     scenario = scenario_box.get()
@@ -102,7 +21,8 @@ def preview_email():
         messagebox.showerror("Error", "Please select a training scenario.")
         return
 
-    subject, body = generate_training_email(scenario)
+    subject, _ = generate_training_email(scenario)
+    body = body_text_box.get("1.0", tk.END).strip()
 
     preview_window = tk.Toplevel(root)
     preview_window.title("Email Preview")
@@ -122,6 +42,37 @@ def preview_email():
 
     body_text.insert("1.0", body)
     body_text.config(state="disabled")
+
+
+def view_logs():
+    logs = read_email_logs()
+
+    if logs is None:
+        messagebox.showinfo("Logs", "No log file found.")
+        return
+
+    log_window = tk.Toplevel(root)
+    log_window.title("Email Logs")
+    log_window.geometry("750x500")
+
+    text_area = tk.Text(log_window, wrap="word")
+    text_area.pack(expand=True, fill="both")
+
+    text_area.insert("1.0", logs)
+    text_area.config(state="disabled")
+
+
+def load_template_body():
+    scenario = scenario_box.get()
+
+    if not scenario:
+        return
+
+    subject, body = generate_training_email(scenario)
+
+    body_text_box.delete("1.0", tk.END)
+    body_text_box.insert("1.0", body)
+
 
 def send_training_email():
     receiver_email = receiver_entry.get().strip()
@@ -155,18 +106,23 @@ def send_training_email():
         return
 
     try:
-        subject, body = generate_training_email(scenario)
+        subject, _ = generate_training_email(scenario)
+        body = body_text_box.get("1.0", tk.END).strip()
+        html_body = generate_html_body(scenario, body)
 
-        msg = EmailMessage()
-        msg["Subject"] = subject
-        msg["From"] = EMAIL_ADDRESS
-        msg["To"] = receiver_email
-        msg.set_content(body)
+        attachment_path = None
 
-        with smtplib.SMTP("smtp.gmail.com", 587) as smtp:
-            smtp.starttls()
-            smtp.login(EMAIL_ADDRESS, APP_PASSWORD)
-            smtp.send_message(msg)
+        send_email(
+            EMAIL_ADDRESS,
+            APP_PASSWORD,
+            receiver_email,
+            subject,
+            body,
+            html_body,
+            attachment_path
+        )
+
+        save_email_log(receiver_email, scenario, "SUCCESS")
 
         messagebox.showinfo(
             "Success",
@@ -175,11 +131,13 @@ def send_training_email():
 
     except Exception as e:
         messagebox.showerror("Send Failed", str(e))
+        save_email_log(receiver_email, scenario, f"FAILED: {e}")
 
 
 root = tk.Tk()
 root.title("Phishing Awareness Email Simulator")
-root.geometry("520x420")
+root.geometry("520x620")
+root.resizable(True, True)
 
 title_label = tk.Label(
     root,
@@ -215,7 +173,16 @@ scenario_box = ttk.Combobox(
     ]
 )
 scenario_box.pack()
+
+body_label = tk.Label(root, text="Custom Email Body:")
+body_label.pack(pady=(15, 5))
+
+body_text_box = tk.Text(root, width=55, height=8, wrap="word")
+body_text_box.pack()
+
 scenario_box.current(0)
+load_template_body()
+scenario_box.bind("<<ComboboxSelected>>", lambda event: load_template_body())
 
 consent_var = tk.BooleanVar()
 
@@ -235,6 +202,15 @@ preview_button = tk.Button(
     height=2
 )
 preview_button.pack(pady=5)
+
+view_logs_button = tk.Button(
+    root,
+    text="View Logs",
+    command=view_logs,
+    width=25,
+    height=2
+)
+view_logs_button.pack(pady=5)
 
 send_button = tk.Button(
     root,

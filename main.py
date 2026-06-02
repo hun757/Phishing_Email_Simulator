@@ -169,9 +169,9 @@ BORDER_COLOR = "#39ff14"
 
 root = tk.Tk()
 root.title("Phishing Awareness Email Simulator")
-root.geometry("630x760")
+root.geometry("700x760")
 root.resizable(True, True)
-root.configure(bg=BG_COLOR)
+root.configure(bg=CARD_COLOR)
 
 
 style = ttk.Style()
@@ -186,34 +186,160 @@ style.configure(
     bordercolor=BORDER_COLOR,
     lightcolor=BORDER_COLOR,
     darkcolor=BORDER_COLOR,
-    selectbackground=BUTTON_COLOR,
-    selectforeground=TEXT_COLOR
+    selectforeground=TEXT_COLOR,
+    insertcolor=TEXT_COLOR,
+    relief="solid",
+    padding=2
 )
 style.map(
     "Dark.TCombobox",
-    fieldbackground=[("readonly", INPUT_COLOR)],
-    selectbackground=[("readonly", BUTTON_COLOR)],
-    selectforeground=[("readonly", TEXT_COLOR)],
-    background=[("readonly", INPUT_COLOR)],
-    foreground=[("readonly", TEXT_COLOR)]
+    fieldbackground=[
+        ("readonly", INPUT_COLOR),
+        ("focus", INPUT_COLOR),
+        ("active", INPUT_COLOR)
+    ],
+    foreground=[
+        ("readonly", TEXT_COLOR),
+        ("focus", TEXT_COLOR),
+        ("active", TEXT_COLOR)
+    ],
+    background=[
+        ("readonly", INPUT_COLOR),
+        ("focus", INPUT_COLOR),
+        ("active", INPUT_COLOR)
+    ],
+    selectbackground=[
+        ("readonly", INPUT_COLOR),
+        ("focus", INPUT_COLOR),
+        ("active", INPUT_COLOR)
+    ],
+    selectforeground=[
+        ("readonly", TEXT_COLOR),
+        ("focus", TEXT_COLOR),
+        ("active", TEXT_COLOR)
+    ],
+    bordercolor=[
+        ("readonly", BORDER_COLOR),
+        ("focus", BORDER_COLOR),
+        ("active", BORDER_COLOR)
+    ],
+    lightcolor=[
+        ("readonly", BORDER_COLOR),
+        ("focus", BORDER_COLOR),
+        ("active", BORDER_COLOR)
+    ],
+    darkcolor=[
+        ("readonly", BORDER_COLOR),
+        ("focus", BORDER_COLOR),
+        ("active", BORDER_COLOR)
+    ]
 )
 
 
-main_frame = tk.Frame(
+canvas = tk.Canvas(
     root,
     bg=CARD_COLOR,
-    padx=30,
-    pady=25,
-    highlightbackground=BORDER_COLOR,
-    highlightthickness=1
+    highlightthickness=0,
+    bd=0,
+    takefocus=0
+)
+canvas.pack(
+    side="left",
+    fill="both",
+    expand=True,
+    padx=(15, 0),
+    pady=15
 )
 
-main_frame.pack(
-    padx=30,
-    pady=30,
-    fill="both",
-    expand=True
+style.layout("Cyber.Vertical.TScrollbar",
+[
+    ('Vertical.Scrollbar.trough',
+     {'children':
+      [('Vertical.Scrollbar.thumb',
+        {'expand': '1', 'sticky': 'nswe'})],
+      'sticky': 'ns'})
+])
+
+style.configure(
+    "Cyber.Vertical.TScrollbar",
+    background=BUTTON_COLOR,
+    troughcolor=BG_COLOR,
+    bordercolor=BORDER_COLOR,
+    arrowcolor=TEXT_COLOR,
+    darkcolor=BUTTON_COLOR,
+    lightcolor=BUTTON_COLOR,
+    gripcount=0,
+    arrowsize=14,
+    width=14
 )
+
+style.map(
+    "Cyber.Vertical.TScrollbar",
+    background=[
+        ("active", "#16a34a"),
+        ("!active", BUTTON_COLOR)
+    ]
+)
+
+scrollbar = ttk.Scrollbar(
+    root,
+    orient="vertical",
+    command=canvas.yview,
+    style="Cyber.Vertical.TScrollbar"
+)
+
+scrollbar.pack(
+    side="right",
+    fill="y",
+    padx=(0,5),
+    pady=15
+)
+
+canvas.configure(yscrollcommand=scrollbar.set)
+
+main_frame = tk.Frame(
+    canvas,
+    bg=CARD_COLOR,
+    padx=20,
+    pady=20,
+    highlightbackground=BORDER_COLOR,
+    highlightcolor=BORDER_COLOR,
+    highlightthickness=2,
+    bd=0,
+    relief="flat",
+    takefocus=0
+)
+
+canvas_window = canvas.create_window(
+    (0, 0),
+    window=main_frame,
+    anchor="nw"
+)
+
+def on_mousewheel(event):
+    canvas.yview_scroll(int(-1 * (event.delta / 120)), "units")
+
+canvas.bind_all("<MouseWheel>", on_mousewheel)
+
+def update_scroll_region(event=None):
+    canvas.configure(scrollregion=canvas.bbox("all"))
+
+
+def resize_main_frame(event=None):
+    canvas_width = canvas.winfo_width()
+
+    canvas.itemconfig(
+        canvas_window,
+        width=canvas_width-10
+    )
+
+    canvas.configure(scrollregion=canvas.bbox("all"))
+
+
+main_frame.bind("<Configure>", update_scroll_region)
+canvas.bind("<Configure>", resize_main_frame)
+root.bind("<Configure>", resize_main_frame)
+
 
 
 def style_button(button):
@@ -266,9 +392,12 @@ receiver_entry = tk.Entry(
     bg=INPUT_COLOR,
     fg=TEXT_COLOR,
     insertbackground=TEXT_COLOR,
-    relief="solid",
-    bd=1,
-    font=("Consolas", 11)
+    relief="flat",
+    font=("Consolas", 11),
+    highlightthickness=2,
+    highlightbackground=BORDER_COLOR,
+    highlightcolor=BORDER_COLOR,
+    bd=0
 )
 receiver_entry.pack(ipady=8, pady=(0, 18))
 
@@ -321,16 +450,29 @@ body_text_box = tk.Text(
     bg=INPUT_COLOR,
     fg=TEXT_COLOR,
     insertbackground=TEXT_COLOR,
-    relief="solid",
-    bd=1,
-    font=("Consolas", 11)
+    relief="flat",
+    bd=0,
+    font=("Consolas", 11),
+    highlightthickness=2,
+    highlightbackground=BORDER_COLOR,
+    highlightcolor=BORDER_COLOR
 )
 body_text_box.pack(pady=(0, 18))
 
 
 scenario_box.current(0)
 load_template_body()
-scenario_box.bind("<<ComboboxSelected>>", lambda event: load_template_body())
+def remove_focus(event=None):
+    root.focus_set()
+
+scenario_box.bind(
+    "<<ComboboxSelected>>",
+    lambda event: [load_template_body(), remove_focus()]
+)
+scenario_box.bind(
+    "<FocusIn>",
+    lambda e: scenario_box.selection_clear()
+)
 
 
 consent_var = tk.BooleanVar()

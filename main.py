@@ -1,8 +1,4 @@
 import os
-
-os.environ["TCL_LIBRARY"] = r"C:\Users\pjhgn\AppData\Local\Programs\Python\Python313\tcl\tcl8.6"
-os.environ["TK_LIBRARY"] = r"C:\Users\pjhgn\AppData\Local\Programs\Python\Python313\tcl\tk8.6"
-
 import tkinter as tk
 from tkinter import ttk, messagebox
 from dotenv import load_dotenv

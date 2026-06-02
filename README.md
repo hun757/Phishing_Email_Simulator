@@ -1,6 +1,8 @@
-# Phishing Awareness Email Simulator
+# PhishLab – Phishing Awareness Email Simulator
 
-A cybersecurity awareness training simulator built with Python and Tkinter.
+## Overview
+
+PhishLab is a Python-based phishing awareness training simulator designed for authorised cybersecurity education and security awareness demonstrations.
 
 This project provides a safe phishing-awareness training environment using custom HTML emails, simulation landing pages, SMTP email delivery, logging features, and a hacker-style dark UI.
 
@@ -17,6 +19,7 @@ This project provides a safe phishing-awareness training environment using custo
 * Modular Python project structure
 * Scenario simulation landing pages
 * Safe training environment with no credential collection
+* Executable (.exe) support using PyInstaller
 
 ---
 
@@ -36,11 +39,12 @@ Each scenario generates different phishing-awareness style email content for cyb
 
 ## Technologies Used
 
-* Python
+* Python 3.13
 * Tkinter
 * HTML/CSS
 * SMTP (Gmail)
-* dotenv
+* python-dotenv
+* PyInstaller
 * Webbrowser module
 
 ---
@@ -48,7 +52,7 @@ Each scenario generates different phishing-awareness style email content for cyb
 ## Project Structure
 
 ```text
-project/
+Phishing_Email_Simulator/
 │
 ├── main.py
 ├── email_templates.py
@@ -67,17 +71,36 @@ project/
 ### 1. Clone Repository
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/YOUR_REPOSITORY.git
-cd YOUR_REPOSITORY
+git clone https://github.com/hun757/Phishing_Email_Simulator.git
+cd Phishing_Email_Simulator
 ```
 
-### 2. Install Requirements
+### 2. Create Virtual Environment
+
+```bash
+python -m venv .venv
+```
+
+Activate environment:
+
+### PowerShell
+
+```powershell
+.\.venv\Scripts\Activate.ps1
+```
+
+---
+
+### 3. Install Dependencies
 
 ```bash
 pip install python-dotenv
+pip install pyinstaller
 ```
 
-### 3. Configure Environment Variables
+---
+
+## Configure Environment Variables
 
 Create a `.env` file:
 
@@ -90,22 +113,28 @@ APP_PASSWORD=your_gmail_app_password
 
 ## Running the Application
 
-Start the desktop application:
-
 ```bash
 python main.py
 ```
 
-Optional local web server for training pages:
+---
 
-```bash
-python -m http.server 8000
+## Build Executable
+
+```powershell
+pyinstaller --onedir --windowed --name PhishLab main.py
 ```
 
-Then open:
+Executable output:
 
 ```text
-http://localhost:8000/training_page.html
+dist/PhishLab/
+```
+
+Run executable:
+
+```text
+PhishLab.exe
 ```
 
 ---
@@ -128,17 +157,17 @@ All simulation pages clearly indicate authorised training after interaction.
 ## Future Improvements
 
 * Scenario-specific phishing landing pages
-* Attachment selection support
+* Attachment support
 * CSV bulk email campaigns
 * SQLite dashboard
 * Click tracking analytics
 * User management system
 * GitHub Pages deployment
-* Executable packaging (.exe)
+* Improved HTML templates
 
 ---
 
 ## Author
 
 Jeonghun Park
-
+Macquarie University – Cybersecurity / IT

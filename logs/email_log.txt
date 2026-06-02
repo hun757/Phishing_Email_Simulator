@@ -1,9 +1,0 @@
-[2026-06-02 17:34:44] Receiver: security8886@gmail.com | Scenario: Password Reset Training | Status: SUCCESS
-[2026-06-02 17:42:42] Receiver: pjhgns1234@gmail.com | Scenario: Password Reset Training | Status: SUCCESS
-[2026-06-02 18:48:15] Receiver: pjhgns1234@gmail.com | Scenario: Password Reset Training | Status: SUCCESS
-[2026-06-02 18:51:09] Receiver: milky9925@gmail.com | Scenario: Password Reset Training | Status: SUCCESS
-[2026-06-02 18:56:20] Receiver: security8886@gmail.com | Scenario: Password Reset Training | Status: SUCCESS
-[2026-06-02 19:01:51] Receiver: security8886@gmail.com | Scenario: Password Reset Training | Status: SUCCESS
-[2026-06-02 19:09:41] Receiver: pjhgns1234@gmail.com | Scenario: Password Reset Training | Status: SUCCESS
-[2026-06-02 19:24:28] Receiver: milky9925@gmail.com | Scenario: Security Alert Training | Status: FAILED: (535, b'5.7.8 Username and Password not accepted. For more information, go to\n5.7.8  https://support.google.com/mail/?p=BadCredentials d9443c01a7336-2bf23915adcsm124318695ad.0 - gsmtp')
-[2026-06-02 19:30:40] Receiver: milky9925@gmail.com | Scenario: Delivery Notification Training | Status: SUCCESS

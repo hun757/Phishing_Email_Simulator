@@ -92,63 +92,59 @@ def load_template_body():
 
 
 def send_training_email():
-    receiver_email = receiver_entry.get().strip()
+    emails_text = receiver_text_box.get("1.0", tk.END).strip()
+    if not emails_text:
+        messagebox.showerror("Error", "Please enter at least one receiver email.")
+        return
+
+    receiver_emails = [
+        email.strip()
+        for email in emails_text.splitlines()
+        if email.strip()
+    ]
     scenario = scenario_box.get()
     consent_checked = consent_var.get()
 
-    if not receiver_email:
-        messagebox.showerror("Error", "Please enter receiver email.")
-        return
-
-    if "@" not in receiver_email or "." not in receiver_email:
-        messagebox.showerror("Error", "Please enter a valid email address.")
-        return
-
-    if not scenario:
-        messagebox.showerror("Error", "Please select a training scenario.")
-        return
-
-    if not consent_checked:
-        messagebox.showerror(
-            "Safety Check",
-            "You must confirm this is for authorised training/testing only."
-        )
-        return
-
-    if not EMAIL_ADDRESS or not APP_PASSWORD:
-        messagebox.showerror(
-            "Environment Error",
-            "EMAIL_ADDRESS or APP_PASSWORD is missing in .env file."
-        )
-        return
-
+    
     try:
         subject, _ = generate_training_email(scenario)
         body = body_text_box.get("1.0", tk.END).strip()
         html_body = generate_html_body(scenario, body)
 
-        attachment_path = None
+        success_count = 0
+        failed_count = 0
 
-        send_email(
-            EMAIL_ADDRESS,
-            APP_PASSWORD,
-            receiver_email,
-            subject,
-            body,
-            html_body,
-            attachment_path
-        )
+        for receiver_email in receiver_emails:
+            if "@" not in receiver_email or "." not in receiver_email:
+                save_email_log(receiver_email, scenario, "FAILED: Invalid email")
+                failed_count += 1
+                continue
 
-        save_email_log(receiver_email, scenario, "SUCCESS")
+            try:
+                send_email(
+                    EMAIL_ADDRESS,
+                    APP_PASSWORD,
+                    receiver_email,
+                    subject,
+                    body,
+                    html_body,
+                    attachment_path=None
+                )
+
+                save_email_log(receiver_email, scenario, "SUCCESS")
+                success_count += 1
+
+            except Exception as e:
+                save_email_log(receiver_email, scenario, f"FAILED: {e}")
+                failed_count += 1
 
         messagebox.showinfo(
-            "Success",
-            f"Training email sent successfully to:\n{receiver_email}"
+            "Send Complete",
+            f"Email sending finished.\n\nSuccess: {success_count}\nFailed: {failed_count}"
         )
 
     except Exception as e:
         messagebox.showerror("Send Failed", str(e))
-        save_email_log(receiver_email, scenario, f"FAILED: {e}")
 
 
 #UI Theme
@@ -395,7 +391,20 @@ receiver_entry = tk.Entry(
     highlightcolor=BORDER_COLOR,
     bd=0
 )
-receiver_entry.pack(ipady=8, pady=(0, 18))
+receiver_text_box = tk.Text(
+    main_frame,
+    width=58,
+    height=4,
+    wrap="word",
+    bg=INPUT_COLOR,
+    fg=TEXT_COLOR,
+    insertbackground=TEXT_COLOR,
+    relief="solid",
+    bd=2,
+    font=("Consolas", 11),
+    highlightthickness=0
+)
+receiver_text_box.pack(pady=(0, 18))
 
 
 scenario_label = tk.Label(

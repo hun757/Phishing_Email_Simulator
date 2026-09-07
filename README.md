@@ -164,6 +164,8 @@ All simulation pages clearly indicate authorised training after interaction.
 * User management system
 * GitHub Pages deployment
 * Improved HTML templates
+  <img width="845" height="958" alt="image" src="https://github.com/user-attachments/assets/b847e0c1-b69a-40b4-9848-ae7f8eee1827" />
+
 
 ---
 
